@@ -1,99 +1,50 @@
 import { Note } from "@/types";
-import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
+import { BookOpen, FileText, MessageSquare, Zap } from "lucide-react";
 
+
+const typeIcons = {
+  word: BookOpen,
+  phrase: MessageSquare,
+  sentence: FileText,
+  grammar: Zap,
+}
+
+const difficultyColors = {
+  beginner: "bg-green-100 text-green-800",
+  intermediate: "bg-yellow-100 text-yellow-800",
+  advanced: "bg-red-100 text-red-800",
+}
 function NoteCard({ note }: { note: Note }) {
-  const getReviewStatus = (note: Note) => {
-    if (note.reviewCount === 0) return "New";
-    if (note.nextReviewAt && new Date(note.nextReviewAt) < new Date())
-      return "Due";
-    return "Reviewed";
-  };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-  const getReviewStatusColor = (status: string) => {
-    switch (status) {
-      case "New":
-        return "bg-blue-100 text-blue-800";
-      case "Due":
-        return "bg-red-100 text-red-800";
-      case "Reviewed":
-        return "bg-green-100 text-green-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
+  const Icon = typeIcons[note.noteType as keyof typeof typeIcons]
   return (
-    <Card
-      data-testid="note-card"
-      key={note.id}
-      className="hover:shadow-md transition-shadow cursor-pointer"
-    >
-      <CardContent className="p-4">
-        <div className="space-y-2">
-          {/* Main content */}
-          <div className="flex items-start justify-between">
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-base truncate">
-                {note.nativeText}
-              </h3>
-              <p
-                className="text-lg font-medium text-primary truncate"
-                dir="rtl"
-              >
-                {note.learningText}
-              </p>
-              <p className="text-xs text-muted-foreground italic">
-                /{note.pronunciation}/
-              </p>
-            </div>
-            <div className="flex flex-col items-end gap-1 ml-2">
-              <Badge variant="outline" className="text-xs capitalize">
-                {note.noteType}
-              </Badge>
-              <Badge
-                className={`text-xs ${getReviewStatusColor(
-                  getReviewStatus(note)
-                )}`}
-              >
-                {getReviewStatus(note)}
-              </Badge>
-            </div>
+    <div key={note.id} className="bg-card border rounded-lg p-4">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
+          <Icon className="h-5 w-5 text-muted-foreground" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <h3 className="font-medium truncate">{note.learningText}</h3>
+            <Badge variant="outline" className="text-xs capitalize">
+              {note.noteType}
+            </Badge>
           </div>
-
-          {/* Tags */}
-          <div className="flex flex-wrap gap-1">
-            {note.tags.slice(0, 3).map((tag, index) => (
-              <Badge
-                key={index}
-                variant="secondary"
-                className="text-xs px-2 py-0"
-              >
+          <p className="text-sm text-muted-foreground mb-2">{note.nativeText}</p>
+          <div className="flex items-center gap-2 flex-wrap">
+            {note.difficulty && (
+              <Badge className={`text-xs ${difficultyColors[note.difficulty]}`}>{note.difficulty}</Badge>
+            )}
+            {note.tags.map((tag) => (
+              <Badge key={tag} variant="secondary" className="text-xs">
                 {tag}
               </Badge>
             ))}
-            {note.tags.length > 3 && (
-              <Badge variant="secondary" className="text-xs px-2 py-0">
-                +{note.tags.length - 3}
-              </Badge>
-            )}
-          </div>
-
-          {/* Footer info */}
-          <div className="flex items-center justify-between text-xs text-muted-foreground pt-1">
-            <span>{note.reviewCount} reviews</span>
-            <span>{formatDate(note.createdAt)}</span>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 

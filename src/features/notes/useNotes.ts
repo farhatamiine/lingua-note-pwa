@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
-import { useQuery } from "@tanstack/react-query";
+import { Note } from "@/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useNotes = () => {
   return useQuery({
@@ -18,5 +19,30 @@ export const useNotes = () => {
       return Notes;
     },
     staleTime: 1000 * 60 * 5,
+  });
+};
+
+export const useAddNote = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (newNote: Note) => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      const { data: Notes, error } = await supabase
+        .from("Notes")
+        .insert([])
+        .select("*")
+        .eq("user_id", user?.id);
+      if (error) {
+        return error;
+      }
+      return Notes;
+    },
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: ["notes"],
+      }),
   });
 };
