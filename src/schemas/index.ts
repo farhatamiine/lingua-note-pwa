@@ -14,7 +14,7 @@ export const noteSchema = z.object({
   nativeText: z.string().min(1, "Native text is required"),
   learningText: z.string().min(1, "Learning text is required"),
   pronunciation: z.string().optional(),
-  voiceUrl: z.url().optional(),
+  voiceUrl: z.string().url().optional().or(z.literal("")),
   noteType: z.enum(["word", "phrase", "sentence", "grammar"]),
   tags: z.array(z.string()),
   notes: z.string().optional(),
@@ -22,9 +22,8 @@ export const noteSchema = z.object({
   examples: z.array(z.string()).default([]),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
-  user_id: z.string().uuid().optional(),
+  user_id: z.string().optional(),
 });
-
 
 export type NoteType = z.infer<typeof noteSchema.shape.noteType>;
 export type Difficulty = z.infer<typeof noteSchema.shape.difficulty>;

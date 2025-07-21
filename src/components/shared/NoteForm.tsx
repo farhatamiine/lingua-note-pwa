@@ -113,7 +113,20 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
               id="pronunciation"
               {...register("pronunciation")}
               placeholder="Enter pronunciation guide"
-              className="flex-1 rounded-xl px-4 py-2"
+              className="flex-1  px-4 py-2"
+            />
+          </div>
+        </div>
+        {/* Voice URL */}
+        <div className="space-y-1">
+          <Label htmlFor="voiceUrl">Voice URL</Label>
+          <div className="flex gap-2 items-center">
+            <Input
+              id="voiceUrl"
+              {...register("voiceUrl")}
+              placeholder="https://example.com/audio.mp3"
+              type="url"
+              className={cn(errors.voiceUrl && "border-red-500")}
             />
             <Button
               type="button"
@@ -124,17 +137,6 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
               <Mic className="h-4 w-4" />
             </Button>
           </div>
-        </div>
-        {/* Voice URL */}
-        <div className="space-y-1">
-          <Label htmlFor="voiceUrl">Voice URL</Label>
-          <Input
-            id="voiceUrl"
-            {...register("voiceUrl")}
-            placeholder="https://example.com/audio.mp3"
-            type="url"
-            className={cn(errors.voiceUrl && "border-red-500")}
-          />
           {errors.voiceUrl && <FormError message={errors.voiceUrl.message} />}
         </div>
 
@@ -184,7 +186,7 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
               onChange={(e) => setNewTag(e.target.value)}
               placeholder="Add a tag"
               className="flex-1"
-              onKeyPress={(e) => {
+              onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
                   handleAddTag();
