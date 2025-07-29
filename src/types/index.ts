@@ -10,9 +10,20 @@ export interface Note {
   nextReviewAt: string | null;
   ease: number | null;
   tags: string[];
-  difficulty: "beginner"| "intermediate"| "advanced",
+  difficulty: "beginner" | "intermediate" | "advanced";
   createdAt: string;
   updatedAt: string;
   slug: string;
   user_id: string;
+  NoteExample?: NoteExample[];
+}
+
+export interface NoteExample {
+  id: string;
+  noteId: string;
+  native: string;
+  learning: string;
+  pronunciation?: string;
+  createdAt: string;
+  updatedAt: string;
 }

@@ -1,6 +1,8 @@
 import { supabase } from "@/lib/supabaseClient";
 import { InsertNoteFormData } from "@/schemas";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import slugify from "slugify";
+import { type Note } from "@/types";
 
 export const useNotes = () => {
   return useQuery({
@@ -37,17 +39,29 @@ export const useAddNote = () => {
         throw new Error("User not authenticated");
       }
 
+      const noteSlug = slugify(
+        `${newNote.learningText} ${newNote.nativeText}`,
+        {
+          replacement: "-",
+          lower: true,
+          strict: true,
+          locale: "fr",
+          trim: true,
+        }
+      );
       const noteData = {
         ...newNote,
+        slug: noteSlug,
         user_id: user.id,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
 
+      console.log(noteData);
+
       const { data, error } = await supabase
         .from("Notes")
         .insert([noteData])
-        .select("*")
         .single();
 
       if (error) {
@@ -110,5 +124,28 @@ export const useUpdateNote = () => {
     onError: (error) => {
       console.error("Error updating note:", error);
     },
+  });
+};
+
+export const useNoteBySlug = (slug: string) => {
+  return useQuery({
+    queryKey: ["note-slug"],
+    queryFn: async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const { data: Note, error } = await supabase
+        .from("Notes")
+        .select("*,NoteExample:NoteExample(*)")
+        .eq("user_id", user?.id)
+        .eq("slug", slug)
+        .single<Note>();
+
+      if (error) {
+        throw error;
+      }
+      return Note;
+    },
+    staleTime: 1000 * 60 * 5,
   });
 };

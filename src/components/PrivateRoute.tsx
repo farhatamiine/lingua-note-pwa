@@ -3,7 +3,6 @@ import { UserAuth } from "@/context/AuthContext";
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { session } = UserAuth();
-  console.log(session);
 
   if (session === undefined) {
     // Auth state still loading

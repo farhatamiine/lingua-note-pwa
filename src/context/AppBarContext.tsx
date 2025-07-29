@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 
 type AppBarConfig = {
+  leftContent?: React.ReactNode;
   title: string;
   rightContent?: React.ReactNode;
 };

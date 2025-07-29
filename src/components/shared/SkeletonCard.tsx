@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function SkeletonCard() {
   return (
-    <div className="container mx-auto p-3 max-w-6xl">
+    <div className="container p-3">
       <div className="mb-8">
         <div className="flex flex-col space-y-3" data-testid="skeleton-card">
           <Skeleton className="h-[125px] w-[250px] rounded-xl" />

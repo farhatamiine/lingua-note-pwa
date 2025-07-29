@@ -9,6 +9,7 @@ export const MainLayout = () => {
   return (
     <div className="flex flex-col min-h-svh">
       <header className="bg-white border-b px-4 py-3 flex items-center justify-between shadow-sm">
+        {config.leftContent}
         <h1 className="text-lg font-semibold">{config.title}</h1>
         {config.rightContent}
       </header>

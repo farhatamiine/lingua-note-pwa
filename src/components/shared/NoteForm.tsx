@@ -1,7 +1,7 @@
 import {
   Difficulty,
   InsertNoteFormData,
-  noteSchema,
+  insertNoteSchema,
   NoteType,
 } from "@/schemas";
 import { useState } from "react";
@@ -40,7 +40,7 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
     setValue,
     watch,
   } = useForm<InsertNoteFormData>({
-    resolver: zodResolver(noteSchema),
+    resolver: zodResolver(insertNoteSchema),
     defaultValues: {
       nativeText: "",
       learningText: "",
