@@ -149,3 +149,37 @@ export const useNoteBySlug = (slug: string) => {
     staleTime: 1000 * 60 * 5,
   });
 };
+
+export const useDeleteNote = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (slug: string) => {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        throw new Error("User not authenticated");
+      }
+
+      const { error } = await supabase
+        .from("Notes")
+        .delete()
+        .eq("slug", slug)
+        .eq("user_id", user.id);
+
+      if (error) {
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["notes"],
+      });
+    },
+    onError: (error) => {
+      console.error("Error deleting note:", error);
+    },
+  });
+};

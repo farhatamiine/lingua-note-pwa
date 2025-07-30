@@ -22,7 +22,7 @@ function NoteCard({ note }: { note: Note }) {
   return (
     <div
       key={note.id}
-      className="bg-card border rounded-lg p-4"
+      className="bg-card border rounded-lg p-4 mb-2"
       onClick={() => navigate(`/notes/${note.slug}`)}
     >
       <div className="flex items-center gap-3">

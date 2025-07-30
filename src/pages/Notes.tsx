@@ -9,7 +9,7 @@ import { useNavigate } from "react-router";
 
 function NotesPage() {
   const { setConfig } = useAppBar();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const notes = useNotes();
 
   const AddButton = useMemo(() => {
@@ -17,7 +17,7 @@ function NotesPage() {
       <Button
         variant={"ghost"}
         onClick={() => {
-          navigate("/editor/add")
+          navigate("/editor/add");
         }}
       >
         <Plus />
@@ -27,8 +27,8 @@ function NotesPage() {
 
   useEffect(() => {
     setConfig({
-      title: "My Notes",
-      rightContent: AddButton,
+      title: "My Notebook",
+      isBorderBottom: false,
     });
   }, [setConfig, AddButton]);
 

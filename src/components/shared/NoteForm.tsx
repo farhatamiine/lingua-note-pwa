@@ -32,7 +32,8 @@ interface NoteFormProps {
 
 function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
   const [newTag, setNewTag] = useState("");
-
+  const [customCategory, setCustomCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Darija Basics");
   const {
     register,
     handleSubmit,
@@ -47,6 +48,7 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
       pronunciation: "",
       voiceUrl: "",
       noteType: "word",
+      category: "Darija Basics",
       difficulty: "beginner",
       ...initialData,
       tags: initialData?.tags ?? [],
@@ -75,7 +77,7 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
     );
   };
   return (
-    <div className="p-5">
+    <div className="p-3">
       <form
         onSubmit={handleSubmit(onFormSubmit)}
         className="space-y-4 animate-in fade-in slide-in-from-bottom-6"
@@ -158,6 +160,34 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
             </SelectContent>
           </Select>
         </div>
+        {/* Category */}
+        <div className="space-y-2">
+          <Label htmlFor="category">Category</Label>
+          <Select
+            name="category"
+            onValueChange={(value) => setSelectedCategory(value)}
+            defaultValue="Darija Basics"
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Darija Basics">Darija Basics</SelectItem>
+              <SelectItem value="Travel Phrases">Travel Phrases</SelectItem>
+              <SelectItem value="Food & Drink">Food & Drink</SelectItem>
+              <SelectItem value="custom">Custom</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {selectedCategory === "custom" && (
+            <Input
+              name="customCategory"
+              placeholder="Enter your own category"
+              value={customCategory}
+              onChange={(e) => setCustomCategory(e.target.value)}
+            />
+          )}
+        </div>
 
         {/* Difficulty */}
         <div className="space-y-1 w-full">
@@ -226,7 +256,7 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
         <Button
           disabled={isLoading}
           type="submit"
-          className="w-full py-3 rounded-xl font-semibold text-white bg-primary hover:bg-primary/90"
+          className="w-full py-3 rounded font-semibold text-white bg-primary hover:bg-primary/90"
         >
           <Loader2Icon
             className={cn("animate-spin", {

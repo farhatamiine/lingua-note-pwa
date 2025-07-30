@@ -3,6 +3,7 @@ import { createContext, ReactNode, useContext, useState } from "react";
 type AppBarConfig = {
   leftContent?: React.ReactNode;
   title: string;
+  isBorderBottom?: boolean;
   rightContent?: React.ReactNode;
 };
 

@@ -1,39 +1,61 @@
 import { NoteExampleItem } from "@/components/shared/NoteExampleItem";
 import { SkeletonCard } from "@/components/shared/SkeletonCard";
+import { WordCard } from "@/components/shared/WordCard";
 import { Button } from "@/components/ui/button";
 import { useAppBar } from "@/context/AppBarContext";
-import { useNoteBySlug } from "@/features/notes/useNotes";
-import { NotebookPen, Trash, Volume2 } from "lucide-react";
-import { useEffect, useMemo } from "react";
+import { useDeleteNote, useNoteBySlug } from "@/features/notes/useNotes";
+import { Note } from "@/types";
+import {
+  ArrowLeft,
+  EllipsisVertical,
+  Pencil,
+  PlusIcon,
+  Trash,
+} from "lucide-react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 function NoteDetailsPage() {
   const params = useParams<{ noteSlug: string }>();
 
   const { setConfig } = useAppBar();
+  const deleteNoteQuery = useDeleteNote();
   const navigate = useNavigate();
   const note = useNoteBySlug(params.noteSlug || "");
+  const currentNote = note.data;
 
-  const RemoveNote = useMemo(() => {
-    return (
+  const ReturnHome = useMemo(
+    () => (
       <Button
-        variant={"destructive"}
+        variant={"ghost"}
         onClick={() => {
-          navigate("/editor/add");
+          navigate("/");
         }}
       >
-        <Trash />
+        <ArrowLeft />
       </Button>
-    );
-  }, [navigate]);
+    ),
+    [navigate]
+  );
+
+  const deleteNote = useCallback(() => {
+    if (params.noteSlug) {
+      deleteNoteQuery.mutateAsync(params.noteSlug).then(() => navigate("/"));
+    }
+  }, [params?.noteSlug, deleteNoteQuery, navigate]);
 
   useEffect(() => {
     setConfig({
-      leftContent: <NotebookPen />,
-      title: "My Notes",
-      rightContent: RemoveNote,
+      leftContent: ReturnHome,
+      title: "Note Details",
+      rightContent: null,
     });
-  }, [setConfig, RemoveNote]);
+  }, [setConfig, ReturnHome]);
 
   if (note.isLoading) return <SkeletonCard />;
   if (note.isError || !note.data) {
@@ -44,41 +66,43 @@ function NoteDetailsPage() {
     );
   }
 
-  const currentNote = note.data;
-
   return (
-    <section className="container">
-      <div className="p-5">
-        <h2 className="scroll-m-20 text-xl font-semibold tracking-tight mb-5">
-          Word
-        </h2>
-        <div className="space-y-5">
-          <div className="flex w-full justify-between items-center">
-            <div>
-              <p className="font-medium">{currentNote.learningText}</p>
-              <small className="text-gray-500 font-medium">Darija</small>
-            </div>
-            <Button variant={"outline"}>
-              <Volume2 />
-            </Button>
-          </div>
-          <div className="flex w-full justify-between items-center">
-            <div>
-              <p className="font-medium">{currentNote.nativeText}</p>
-              <small className="text-gray-500 font-medium">French</small>
-            </div>
-            <Button variant={"outline"}>
-              <Volume2 />
-            </Button>
-          </div>
+    <section className="container relative">
+      <div className="p-5 ">
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="scroll-m-20 text-xl font-semibold tracking-tight ">
+            Word
+          </h2>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="outline-0">
+                <EllipsisVertical />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-10" align="end">
+              <DropdownMenuItem className="font-medium">
+                <Pencil /> Edit Note
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-red-600" onClick={deleteNote}>
+                <Trash color="red" /> Delete Note
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
+
+        <WordCard note={currentNote || ({} as Note)} />
       </div>
       <div className=" p-5">
-        <h2 className="scroll-m-20 text-xl font-semibold tracking-tight my-5">
-          Examples
-        </h2>
+        <div className="flex justify-between items-center">
+          <h2 className="scroll-m-20 text-xl font-semibold tracking-tight my-5">
+            Examples
+          </h2>
+          <Button variant={"outline"}>
+            <PlusIcon />
+          </Button>
+        </div>
         <div className="overflow-y-scroll h-[300px]">
-          {currentNote.NoteExample?.map((notexample) => {
+          {currentNote?.NoteExample?.map((notexample) => {
             return (
               <NoteExampleItem
                 key={notexample.id}
@@ -86,7 +110,6 @@ function NoteDetailsPage() {
                 learningText={notexample.learning}
                 languageLabel="Darija"
                 onPlay={() => {
-                  // optional play logic here (e.g., play audio)
                   console.log("Play audio");
                 }}
               />

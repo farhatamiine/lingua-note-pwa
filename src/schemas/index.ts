@@ -19,6 +19,7 @@ export const noteSchema = z.object({
   tags: z.array(z.string()),
   notes: z.string().optional(),
   difficulty: z.enum(["beginner", "intermediate", "advanced"]),
+  category: z.string().optional(),
   examples: z.array(z.string()).default([]),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),

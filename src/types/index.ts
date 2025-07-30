@@ -10,7 +10,7 @@ export interface Note {
   nextReviewAt: string | null;
   ease: number | null;
   tags: string[];
-  difficulty: "beginner" | "intermediate" | "advanced";
+  difficulty?: "beginner" | "intermediate" | "advanced";
   createdAt: string;
   updatedAt: string;
   slug: string;

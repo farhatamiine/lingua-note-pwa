@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Book, Brain, Home, User } from "lucide-react";
+import { Brain, CircleUserRound, Home, NotebookPen } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
 
 interface NavItem {
@@ -18,8 +18,8 @@ const navItems: NavItem[] = [
   },
   {
     id: "notes",
-    label: "Notes",
-    icon: Book,
+    label: "Notebook",
+    icon: NotebookPen,
     href: "/notes",
   },
   {
@@ -31,7 +31,7 @@ const navItems: NavItem[] = [
   {
     id: "profile",
     label: "Profile",
-    icon: User,
+    icon: CircleUserRound,
     href: "/profile",
   },
 ];
