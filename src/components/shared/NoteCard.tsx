@@ -21,6 +21,7 @@ function NoteCard({ note }: { note: Note }) {
   const Icon = typeIcons[note.noteType as keyof typeof typeIcons];
   return (
     <div
+      data-testid={`note-${note.id}`}
       key={note.id}
       className="bg-card border rounded-lg p-4 mb-2"
       onClick={() => navigate(`/notes/${note.slug}`)}
