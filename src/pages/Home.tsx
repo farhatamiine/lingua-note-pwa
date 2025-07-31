@@ -1,6 +1,7 @@
 import NotesList from "@/components/shared/NotesList";
 import { SkeletonCard } from "@/components/shared/SkeletonCard";
 import { Button } from "@/components/ui/button";
+import { FloatingActionButton } from "@/components/ui/FloatingActionButton";
 import { useAppBar } from "@/context/AppBarContext";
 import { useNotes } from "@/features/notes/useNotes";
 import { Notebook, Search } from "lucide-react";
@@ -20,6 +21,10 @@ function HomePage() {
       </Button>
     );
   }, [navigate]);
+
+  const addNewNote = () => {
+    navigate("/editor/add");
+  };
 
   useEffect(() => {
     setConfig({
@@ -41,6 +46,7 @@ function HomePage() {
   return (
     <div className="container mx-auto p-3 max-w-6xl">
       <NotesList notes={notes.data} />
+      <FloatingActionButton onClick={addNewNote} />
     </div>
   );
 }

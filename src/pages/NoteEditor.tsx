@@ -4,6 +4,7 @@ import { InsertNoteFormData } from "@/schemas";
 import { useAddNote, useUpdateNote } from "@/features/notes/useNotes";
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
+import GoBackButton from "@/components/shared/GoBackButton";
 interface NoteEditorProps {
   initialData?: InsertNoteFormData;
 }
@@ -19,6 +20,7 @@ function NoteEditor({ initialData }: NoteEditorProps) {
 
   useEffect(() => {
     setConfig({
+      leftContent: <GoBackButton route="/" />,
       title: title,
     });
   }, [setConfig, title]);

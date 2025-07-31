@@ -44,6 +44,7 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    dedupe: ["react", "react-dom"], // <-- THIS IS CRUCIAL
   },
   build: {
     rollupOptions: {
