@@ -4,7 +4,7 @@ import {
   insertNoteSchema,
   NoteType,
 } from "@/schemas";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
@@ -28,18 +28,24 @@ interface NoteFormProps {
   onSubmit: (data: InsertNoteFormData) => void;
   onCancel?: () => void;
   isLoading?: boolean;
+  isEditMode?: boolean;
 }
 
-function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
+function NoteForm({
+  initialData,
+  onSubmit,
+  isLoading = false,
+  isEditMode = false,
+}: NoteFormProps) {
   const [newTag, setNewTag] = useState("");
   const [customCategory, setCustomCategory] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Darija Basics");
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
     watch,
+    reset,
   } = useForm<InsertNoteFormData>({
     resolver: zodResolver(insertNoteSchema),
     defaultValues: {
@@ -49,17 +55,27 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
       noteType: "word",
       category: "Darija Basics",
       difficulty: "beginner",
-      ...initialData,
-      tags: initialData?.tags ?? [],
+      tags: [],
     },
   });
+
+  useEffect(() => {
+    if (initialData) {
+      reset(initialData);
+    }
+  }, [initialData, reset]);
 
   const watchedTags = watch("tags") || [];
   const watchedNoteType = watch("noteType");
   const watchedDifficulty = watch("difficulty");
+  const watchedCategory = watch("category");
 
   const onFormSubmit = (data: InsertNoteFormData) => {
     onSubmit(data);
+  };
+
+  const onFormError = (errors: unknown) => {
+    console.log("Form validation errors:", errors);
   };
 
   const handleAddTag = () => {
@@ -78,7 +94,7 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
   return (
     <div className="p-3">
       <form
-        onSubmit={handleSubmit(onFormSubmit)}
+        onSubmit={handleSubmit(onFormSubmit, onFormError)}
         className="space-y-4 animate-in fade-in slide-in-from-bottom-6"
       >
         <div className="space-y-1">
@@ -141,9 +157,10 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
         <div className="space-y-2">
           <Label htmlFor="category">Category</Label>
           <Select
-            name="category"
-            onValueChange={(value) => setSelectedCategory(value)}
-            defaultValue="Darija Basics"
+            value={watchedCategory}
+            onValueChange={(value) => {
+              setValue("category", value === "custom" ? customCategory : value);
+            }}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select category" />
@@ -156,12 +173,14 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
             </SelectContent>
           </Select>
 
-          {selectedCategory === "custom" && (
+          {watchedCategory === "custom" && (
             <Input
-              name="customCategory"
               placeholder="Enter your own category"
               value={customCategory}
-              onChange={(e) => setCustomCategory(e.target.value)}
+              onChange={(e) => {
+                setCustomCategory(e.target.value);
+                setValue("category", e.target.value);
+              }}
             />
           )}
         </div>
@@ -241,7 +260,7 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
               inline: isLoading,
             })}
           />
-          Submit
+          {isEditMode ? "Edit Note" : "Save Note"}
         </Button>
       </form>
     </div>

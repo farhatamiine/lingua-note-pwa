@@ -33,8 +33,6 @@ export const useAddNote = () => {
         error: userError,
       } = await supabase.auth.getUser();
 
-      console.log(newNote);
-
       if (userError || !user) {
         throw new Error("User not authenticated");
       }
@@ -56,8 +54,6 @@ export const useAddNote = () => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
-
-      console.log(noteData);
 
       const { data, error } = await supabase
         .from("Notes")
@@ -146,6 +142,30 @@ export const useNoteBySlug = (slug: string) => {
       }
       return Note;
     },
+    staleTime: 1000 * 60 * 5,
+  });
+};
+
+export const useNoteById = (id: string) => {
+  return useQuery({
+    queryKey: ["note-id", id],
+    queryFn: async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const { data: Note, error } = await supabase
+        .from("Notes")
+        .select("*,NoteExample:NoteExample(*)")
+        .eq("user_id", user?.id)
+        .eq("id", id)
+        .single<InsertNoteFormData>();
+
+      if (error) {
+        throw error;
+      }
+      return Note;
+    },
+    enabled: !!id,
     staleTime: 1000 * 60 * 5,
   });
 };

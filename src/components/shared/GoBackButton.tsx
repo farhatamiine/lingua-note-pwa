@@ -6,7 +6,16 @@ function GoBackButton({ route }: { route: string }) {
   const navigate = useNavigate();
 
   return (
-    <Button variant={"link"} onClick={() => navigate(route)}>
+    <Button
+      variant={"link"}
+      onClick={() => {
+        if (route === "back") {
+          navigate(-1);
+        } else {
+          navigate(route);
+        }
+      }}
+    >
       <ArrowLeft />
     </Button>
   );

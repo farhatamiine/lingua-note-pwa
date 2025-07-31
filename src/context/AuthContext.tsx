@@ -38,7 +38,6 @@ export const AuthContextProvider = ({
     });
 
     if (error) {
-      console.error("Sign-up error:", error.message);
       return { success: false, error };
     }
 
@@ -52,7 +51,6 @@ export const AuthContextProvider = ({
     });
 
     if (error) {
-      console.error("Sign-in error:", error.message);
       return { success: false, error };
     }
 

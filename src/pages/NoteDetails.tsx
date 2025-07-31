@@ -49,6 +49,10 @@ function NoteDetailsPage() {
     }
   }, [params?.noteSlug, deleteNoteQuery, navigate]);
 
+  const editNote = () => {
+    navigate(`/editor/edit/${currentNote?.id}`);
+  };
+
   useEffect(() => {
     setConfig({
       leftContent: ReturnHome,
@@ -80,7 +84,7 @@ function NoteDetailsPage() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-10" align="end">
-              <DropdownMenuItem className="font-medium">
+              <DropdownMenuItem className="font-medium" onClick={editNote}>
                 <Pencil /> Edit Note
               </DropdownMenuItem>
               <DropdownMenuItem className="text-red-600" onClick={deleteNote}>
@@ -109,9 +113,7 @@ function NoteDetailsPage() {
                 nativeText={notexample.native}
                 learningText={notexample.learning}
                 languageLabel="Darija"
-                onPlay={() => {
-                  console.log("Play audio");
-                }}
+                onPlay={() => {}}
               />
             );
           })}

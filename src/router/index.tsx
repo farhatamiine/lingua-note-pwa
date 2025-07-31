@@ -37,7 +37,7 @@ export const router = createBrowserRouter([
         element: <ReviewPage />,
       },
       {
-        path: "/editor/:action",
+        path: "/editor/:action/:noteId?",
         element: <NoteEditor />,
       },
       {

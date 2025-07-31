@@ -32,6 +32,8 @@ export type NoteFormData = z.infer<typeof noteSchema>;
 
 export const insertNoteSchema = noteSchema.omit({
   examples: true,
+  createdAt: true,
+  updatedAt: true,
 });
 
 export type InsertNoteFormData = z.infer<typeof insertNoteSchema>;
