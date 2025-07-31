@@ -129,7 +129,7 @@ export const useUpdateNote = () => {
 
 export const useNoteBySlug = (slug: string) => {
   return useQuery({
-    queryKey: ["note-slug"],
+    queryKey: ["note-slug", slug],
     queryFn: async () => {
       const {
         data: { user },

@@ -3,7 +3,6 @@ export interface Note {
   nativeText: string;
   learningText: string;
   pronunciation: string;
-  voiceUrl: string;
   noteType: string;
   reviewCount: number;
   lastReviewedAt: string | null;

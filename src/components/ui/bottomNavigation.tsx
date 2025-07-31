@@ -20,7 +20,7 @@ const navItems: NavItem[] = [
     id: "notes",
     label: "Notebook",
     icon: NotebookPen,
-    href: "/notes",
+    href: "/notebook",
   },
   {
     id: "review",

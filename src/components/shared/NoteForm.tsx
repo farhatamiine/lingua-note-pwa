@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Plus, X, Mic, Loader2Icon } from "lucide-react";
+import { Plus, X, Loader2Icon } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { FormError } from "../ui/FormError";
 
@@ -46,7 +46,6 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
       nativeText: "",
       learningText: "",
       pronunciation: "",
-      voiceUrl: "",
       noteType: "word",
       category: "Darija Basics",
       difficulty: "beginner",
@@ -118,28 +117,6 @@ function NoteForm({ initialData, onSubmit, isLoading = false }: NoteFormProps) {
               className="flex-1  px-4 py-2"
             />
           </div>
-        </div>
-        {/* Voice URL */}
-        <div className="space-y-1">
-          <Label htmlFor="voiceUrl">Voice URL</Label>
-          <div className="flex gap-2 items-center">
-            <Input
-              id="voiceUrl"
-              {...register("voiceUrl")}
-              placeholder="https://example.com/audio.mp3"
-              type="url"
-              className={cn(errors.voiceUrl && "border-red-500")}
-            />
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="rounded-full border-muted"
-            >
-              <Mic className="h-4 w-4" />
-            </Button>
-          </div>
-          {errors.voiceUrl && <FormError message={errors.voiceUrl.message} />}
         </div>
 
         {/* Note Type */}

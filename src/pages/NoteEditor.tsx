@@ -36,7 +36,7 @@ function NoteEditor({ initialData }: NoteEditorProps) {
       }
 
       // Navigate back to notes list after successful submission
-      navigate("/notes");
+      navigate("/");
     } catch (error) {
       console.error("Error saving note:", error);
       console.error("Failed to save note. Please try again.");

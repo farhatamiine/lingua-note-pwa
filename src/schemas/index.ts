@@ -14,7 +14,6 @@ export const noteSchema = z.object({
   nativeText: z.string().min(1, "Native text is required"),
   learningText: z.string().min(1, "Learning text is required"),
   pronunciation: z.string().optional(),
-  voiceUrl: z.string().url().optional().or(z.literal("")),
   noteType: z.enum(["word", "phrase", "sentence", "grammar"]),
   tags: z.array(z.string()),
   notes: z.string().optional(),

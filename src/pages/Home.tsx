@@ -44,9 +44,11 @@ function HomePage() {
     );
   }
   return (
-    <div className="container mx-auto p-3 max-w-6xl">
-      <NotesList notes={notes.data} />
-      <FloatingActionButton onClick={addNewNote} />
+    <div className="container mx-auto p-3 max-w-6xl overflow-y-auto">
+      <div className="h-[calc(100vh-8rem)] overflow-y-auto pb-10">
+        <NotesList notes={notes.data} />
+        <FloatingActionButton onClick={addNewNote} />
+      </div>
     </div>
   );
 }

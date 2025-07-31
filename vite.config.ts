@@ -13,18 +13,24 @@ export default defineConfig({
       registerType: "autoUpdate",
       injectRegister: false,
 
-      pwaAssets: {
-        disabled: false,
-        config: false,
-      },
-
       manifest: {
         name: "lingua",
         short_name: "lingua",
         description: "lingua",
         theme_color: "#ffffff",
+        icons: [
+          {
+            src: "icon-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "icon-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+        ],
       },
-
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
         cleanupOutdatedCaches: true,
@@ -38,6 +44,7 @@ export default defineConfig({
         type: "module",
       },
     }),
+
     tailwindcss(),
   ],
   resolve: {
@@ -51,6 +58,7 @@ export default defineConfig({
       external: ["sharp"],
     },
   },
+
   test: {
     globals: true,
     environment: "jsdom",
