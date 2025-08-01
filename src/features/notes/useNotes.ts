@@ -5,20 +5,24 @@ import slugify from "slugify";
 import { type Note } from "@/types";
 
 export const useNotes = () => {
-  return useQuery({
+  return useQuery<Note[], Error>({
     queryKey: ["notes"],
     queryFn: async () => {
       const {
         data: { user },
+        error: userError,
       } = await supabase.auth.getUser();
+
+      if (userError) throw userError;
+
       const { data: Notes, error } = await supabase
         .from("Notes")
         .select("*")
         .eq("user_id", user?.id);
-      if (error) {
-        return error;
-      }
-      return Notes;
+
+      if (error) throw error;
+
+      return Notes ?? [];
     },
     staleTime: 1000 * 60 * 5,
   });

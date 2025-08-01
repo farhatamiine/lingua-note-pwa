@@ -5,6 +5,7 @@ export interface Note {
   pronunciation: string;
   noteType: string;
   reviewCount: number;
+  category: string;
   lastReviewedAt: string | null;
   nextReviewAt: string | null;
   ease: number | null;

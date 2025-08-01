@@ -18,12 +18,12 @@ const difficultyColors = {
 function NoteCard({ note }: { note: Note }) {
   const navigate = useNavigate();
 
-  const Icon = typeIcons[note.noteType as keyof typeof typeIcons];
+  const Icon = typeIcons[note.noteType as keyof typeof typeIcons] ?? BookOpen;
   return (
     <div
       data-testid={`note-${note.id}`}
       key={note.id}
-      className="bg-card border rounded-lg p-4 mb-2"
+      className="bg-card border rounded-lg p-4 mb-2 cursor-pointer hover:bg-gray-50"
       onClick={() => navigate(`/notes/${note.slug}`)}
     >
       <div className="flex items-center gap-3">
