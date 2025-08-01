@@ -85,6 +85,7 @@ export const createMockNote = (overrides: Partial<Note> = {}): Note => {
     nativeText: "Bonjour",
     pronunciation: "salaam",
     noteType: "expression",
+    category: "",
     tags: ["greeting", "basic"],
     reviewCount: 0,
     lastReviewedAt: null,

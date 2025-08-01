@@ -1,4 +1,6 @@
 /// <reference types="vitest" />
+/// <reference types="vite-plugin-pwa/client" />
+
 import { VitePWA } from "vite-plugin-pwa";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
@@ -11,8 +13,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      injectRegister: false,
-
+      injectRegister: "auto",
       manifest: {
         name: "lingua",
         short_name: "lingua",
