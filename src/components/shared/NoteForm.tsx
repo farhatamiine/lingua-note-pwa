@@ -39,6 +39,7 @@ function NoteForm({
 }: NoteFormProps) {
   const [newTag, setNewTag] = useState("");
   const [customCategory, setCustomCategory] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -140,6 +141,7 @@ function NoteForm({
           <Label>Note Type *</Label>
           <Select
             value={watchedNoteType}
+            {...register("noteType")}
             onValueChange={(value: NoteType) => setValue("noteType", value)}
           >
             <SelectTrigger className="w-full">
@@ -158,8 +160,14 @@ function NoteForm({
           <Label htmlFor="category">Category</Label>
           <Select
             value={watchedCategory}
+            {...register("category")}
             onValueChange={(value) => {
-              setValue("category", value === "custom" ? customCategory : value);
+              if (value === "custom") {
+                setValue("category", "custom");
+              } else {
+                setValue("category", value);
+                setCustomCategory(""); // Clear custom category when switching away
+              }
             }}
           >
             <SelectTrigger className="w-full">
